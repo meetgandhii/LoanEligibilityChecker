@@ -16,14 +16,7 @@ class _AboutUsState extends State<AboutUs> {
         backgroundColor: appBarandButtonColor,
         title: Text('About Us'),
       ),
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          image: DecorationImage(image: bgImg, fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(),
-      ),
-      drawer: DrawerLoan(),
+      body: Container(),
     );
   }
 }

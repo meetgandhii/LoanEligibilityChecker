@@ -17,13 +17,6 @@ class _ChatWithUsState extends State<ChatWithUs> {
         title: Text('Chat With Us'),
       ),
       body: Container(
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          image: DecorationImage(image: bgImg, fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(),
-      ),
-      drawer: DrawerLoan(),
-    );
+    ),);
   }
 }

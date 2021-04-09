@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'widgets.dart';
 import 'const.dart';
 
@@ -12,18 +12,10 @@ class _FAQsState extends State<FAQs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
         backgroundColor: appBarandButtonColor,
         title: Text('FAQs'),
       ),
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          image: DecorationImage(image: bgImg, fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(),
-      ),
-      drawer: DrawerLoan(),
+      body: Container(),
     );
   }
 }

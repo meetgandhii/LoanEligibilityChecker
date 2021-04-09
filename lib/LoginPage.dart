@@ -1,131 +1,89 @@
+import 'package:LoanEligibilityChecker/backgroundandimg.dart';
 import 'package:flutter/material.dart';
-import 'package:logindemo/Signin.dart';
 import 'const.dart';
-import 'HomePage.dart';
+import 'MyProfile.dart';
+import 'backgroundandimg.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        
-        backgroundColor: appBarandButtonColor,
-        title: Text("Login Page"),
-      ),
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          image: DecorationImage(image: bgImg, fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Backgroundandimg(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Center(
-                  child: Container(
-                    width: 250,
-                    height: 150,
-                    child: Image.asset(loanImage),
-                  ),
-                ),
+              SizedBox(
+                height: 100.0,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Email',
-                      hintText: 'Enter valid email id'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 0),
-                //padding: EdgeInsets.symmetric(horizontal: 15),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                      hintText: 'Enter password'),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  //Forgot Password screen push here
-                },
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
-                  'Forgot Password',
-                  style: TextStyle(color: appBarandButtonColor, fontSize: 15),
+                  "LOGIN",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: loginpageTextColor,
+                      fontSize: 36),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              SizedBox(height: size.height * 0.03),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                child: TextField(
+                  decoration: InputDecoration(labelText: "Email Id"),
+                ),
+              ),
+              SizedBox(height: size.height * 0.03),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                child: TextField(
+                  decoration: InputDecoration(labelText: "Password"),
+                  obscureText: true,
                 ),
               ),
               Container(
-                height: 50,
-                width: 250,
-                decoration: BoxDecoration(
-                    color: appBarandButtonColor,
-                    borderRadius: BorderRadius.circular(20)),
-                child: FlatButton(
+                alignment: Alignment.centerRight,
+                margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                child: Text(
+                  "Forgot your password?",
+                  //send otp here
+                  style: TextStyle(fontSize: 12, color: loginpageTextColor),
+                ),
+              ),
+              SizedBox(height: size.height * 0.05),
+              Container(
+                alignment: Alignment.centerRight,
+                margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                child: RaisedButton(
                   onPressed: () {
-                    print(emailController.text);
-                    print(passwordController.text);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => HomePage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => MyProfile()),
                     );
-                  },
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => Signin(),
+                  }, 
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(80.0)),
+                  textColor: Colors.white,
+                  padding: const EdgeInsets.all(0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50.0,
+                    width: size.width * 0.5,
+                    decoration: boxDesign(),
+                    padding: const EdgeInsets.all(0),
+                    child: Text(
+                      "LOGIN",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  );
-                },
-                child: Text(
-                  'New User? Create Account',
-                  style: TextStyle(
-                    color: textColor,
-                    shadows: <Shadow>[
-                      Shadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 8.0,
-                        color: shadowColor,
-                      ),
-                      Shadow(
-                        offset: Offset(1.0, 1.0),
-                        blurRadius: 8.0,
-                        color: shadowColor,
-                      ),
-                    ],
                   ),
                 ),
-
-                // style: TextStyle(color: ),
-              )
+              ),
             ],
           ),
         ),

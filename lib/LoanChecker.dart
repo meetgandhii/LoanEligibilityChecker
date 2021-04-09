@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'widgets.dart';
-import 'package:logindemo/HomePage.dart';
+import 'MyProfile.dart';
 import 'const.dart';
 
 class LoanChecker extends StatefulWidget {
@@ -12,44 +12,67 @@ class _LoanCheckerState extends State<LoanChecker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        
-        backgroundColor: appBarandButtonColor,
-        title: Text('Loan Checker'),
-      ),
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          image: DecorationImage(image: bgImg, fit: BoxFit.cover),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 80,
-                  width: 150,
-                  decoration: BoxDecoration(
-                      color: appBarandButtonColor,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: FlatButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => HomePage()));
-                    },
-                    child: Text(
-                      'GO back to homepage',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+      body: SingleChildScrollView(
+        child: Startbar(
+            appbartext: 'Loan Eligibility Checker',
+            child: Container(
+              margin: EdgeInsets.only(top: 100),
+              // width: 250,
+              child: Column(
+                children: [
+                  Image.asset(
+                    'assets/images/check.png',
+                    width: 250,
+                  ),
+                  Container(
+                    width: 200,
+                    margin: EdgeInsets.only(top: 00, right: 40, left: 40),
+                    // margin: EdgeInsets.symmetric(horizontal: 40),
+                    child: TextField(
+                      decoration:
+                          InputDecoration(labelText: "Enter the Loan Amount"),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
+                  Container(
+                    width: 150,
+                    alignment: Alignment.centerRight,
+                    margin: EdgeInsets.only(left: 40, right: 40, top: 40),
+                    child: RaisedButton(
+                      onPressed: () {
+                        setState(() {
+                          loanStatus = 'Loan is approved';
+                        });
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80.0)),
+                      textColor: Colors.white,
+                      padding: const EdgeInsets.all(0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50.0,
+                        // width: size.width * 0.5,
+                        decoration: boxDesign(),
+                        padding: const EdgeInsets.all(0),
+                        child: Text(
+                          "Submit",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Details(
+                      name: 'Loan Status: ' + loanStatus,
+                      size: 15.0,
+                      align: Alignment.topCenter,
+                    ),
+                  ),
+                ],
+              ),
+            )),
       ),
-      drawer: DrawerLoan(),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }
