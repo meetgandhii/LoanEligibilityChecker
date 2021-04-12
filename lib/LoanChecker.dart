@@ -7,7 +7,7 @@ class LoanChecker extends StatefulWidget {
   @override
   _LoanCheckerState createState() => _LoanCheckerState();
 }
-
+int i = 0;
 class _LoanCheckerState extends State<LoanChecker> {
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,11 @@ class _LoanCheckerState extends State<LoanChecker> {
                     child: RaisedButton(
                       onPressed: () {
                         setState(() {
+                          i++;
+                          if (i%2==1)
                           loanStatus = 'Loan is approved';
+                          else 
+                          loanStatus = 'Loan is rejected';
                         });
                       },
                       shape: RoundedRectangleBorder(
