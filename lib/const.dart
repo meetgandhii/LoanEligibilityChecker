@@ -9,7 +9,7 @@ const textColor = Color(0xFFE6E6FF);
 const loginpageTextColor = Color(0xFF2661FA);
 // const IconData arrow_forward = IconData(0xe5af, fontFamily: 'MaterialIcons', matchTextDirection: true);
 const darkblue = Color(0xFF180e58);
-String loanStatus = "No Loans Currently";
+
 //signin
 TextEditingController emailController = TextEditingController();
 TextEditingController dobController = TextEditingController();
@@ -19,11 +19,25 @@ String dob;
 String dt, mnth, yr;
 String dobText = 'Click here to select DOB';
 
-BoxDecoration boxDesign() {
-  return BoxDecoration(
-      borderRadius: BorderRadius.circular(80),
-      gradient: LinearGradient(colors: [
-        Color.fromRGBO(13, 148, 251, 1),
-        Color.fromRGBO(13, 148, 251, .6),
-      ]));
-}
+
+final TextEditingController spnameController = TextEditingController();
+final TextEditingController spageController = TextEditingController();
+final TextEditingController spgenderController = TextEditingController();
+final TextEditingController spmarryController = TextEditingController();
+final TextEditingController spdependantsController = TextEditingController();
+final TextEditingController speducationController = TextEditingController();
+final TextEditingController spselfemployController = TextEditingController();
+final TextEditingController spyourincomeController = TextEditingController();
+final TextEditingController spcoincomeController = TextEditingController();
+final TextEditingController sppropertyareaController = TextEditingController();
+final TextEditingController spaccbalController = TextEditingController();
+final TextEditingController spsavingsController = TextEditingController();
+final TextEditingController spemploydurationController = TextEditingController();
+final TextEditingController spccwusController = TextEditingController(); //ccwus = credit cards with us
+final TextEditingController spccwothersController = TextEditingController(); // see upar and samaj jao khudse
+final TextEditingController spaptstatusController = TextEditingController();
+final TextEditingController spoccupationController = TextEditingController();
+final TextEditingController spemailController = TextEditingController();
+final TextEditingController sppasswordController = TextEditingController();
+final TextEditingController lcloanAmtController = TextEditingController();
+final TextEditingController lcloanDurationController = TextEditingController();

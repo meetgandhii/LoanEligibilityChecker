@@ -1,4 +1,7 @@
 import 'package:LoanEligibilityChecker/LoginPage.dart';
+import 'package:LoanEligibilityChecker/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'ContactUs.dart';
@@ -7,6 +10,13 @@ import 'MyProfile.dart';
 import 'const.dart';
 import 'background.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'AuthenticationService.dart';
+import 'package:provider/provider.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To Firestore
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart'; // For Image Picker
+import 'package:path/path.dart' as Path;
 
 class DrawerLoan extends StatelessWidget {
   @override
@@ -36,7 +46,7 @@ class DrawerLoan extends StatelessWidget {
             Listcontain(
                 pagename: 'My Profile',
                 tapdeets: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                   Navigator.push(
                       context, MaterialPageRoute(builder: (_) => MyProfile()));
                 }),
@@ -44,7 +54,7 @@ class DrawerLoan extends StatelessWidget {
             Listcontain(
                 pagename: 'Loan Eligibility Checker',
                 tapdeets: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => LoanChecker()));
                 }),
@@ -52,7 +62,7 @@ class DrawerLoan extends StatelessWidget {
             Listcontain(
                 pagename: 'Contact Us',
                 tapdeets: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                   Navigator.push(
                       context, MaterialPageRoute(builder: (_) => ContactUs()));
                 }),
@@ -60,15 +70,38 @@ class DrawerLoan extends StatelessWidget {
             Listcontain(
                 pagename: 'Sign Out',
                 tapdeets: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => LoginPage()));
+                  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+                  _signOut() async {
+                    await _firebaseAuth.signOut();
+                    Navigator.popUntil(context, ModalRoute.withName(AuthenticationWrapper().toString()));
+                    
+
+                    // await _googleSignIn.signOut();
+                  }
+
+                  _signOut();
+                  // Navigator.of(context)
+                  //     .popUntil(ModalRoute.withName("/LoginPage"));
+                  // runApp(MyApp());
+
+                  // Navigator.of(context, rootNavigator: true).pop();
+                  // Navigator.push(
+                  //     context, MaterialPageRoute(builder: (_) => LoginPage()));
                 }),
           ],
         ),
       ),
     );
   }
+}
+
+BoxDecoration boxDesign() {
+  return BoxDecoration(
+      borderRadius: BorderRadius.circular(80),
+      gradient: LinearGradient(colors: [
+        Color.fromRGBO(13, 148, 251, 1),
+        Color.fromRGBO(13, 148, 251, .6),
+      ]));
 }
 
 class Spacing extends StatelessWidget {
@@ -168,7 +201,7 @@ class BottomNavigation extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => MyProfile()),
@@ -182,7 +215,7 @@ class BottomNavigation extends StatelessWidget {
         ),
         TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              // Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LoanChecker()),
@@ -195,7 +228,7 @@ class BottomNavigation extends StatelessWidget {
             )),
         TextButton(
           onPressed: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ContactUs()),
@@ -242,6 +275,40 @@ class Details extends StatelessWidget {
         //   color: Colors.black,
         // ),
       ),
+    );
+  }
+}
+
+class SignUpWidget extends StatelessWidget {
+  const SignUpWidget({
+    this.hint,
+    @required this.controllerVar,
+    @required this.label,
+    @required this.bl,
+    Key key,
+  }) : super(key: key);
+  final String label;
+  final bool bl;
+  final String hint;
+  final TextEditingController controllerVar;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.center,
+          margin: EdgeInsets.symmetric(horizontal: 40),
+          child: TextField(
+            controller: controllerVar,
+            decoration: InputDecoration(
+              labelText: label,
+              hintText: hint,
+            ),
+            obscureText: bl,
+          ),
+        ),
+      ],
     );
   }
 }

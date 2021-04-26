@@ -1,10 +1,40 @@
+import 'package:LoanEligibilityChecker/AuthenticationService.dart';
+import 'package:LoanEligibilityChecker/SignUp.dart';
 import 'package:LoanEligibilityChecker/backgroundandimg.dart';
+import 'package:LoanEligibilityChecker/widgets.dart';
 import 'package:flutter/material.dart';
 import 'const.dart';
-import 'MyProfile.dart';
 import 'backgroundandimg.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+showAlertDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: new Row(
+      children: [
+        CircularProgressIndicator(),
+        Container(margin: EdgeInsets.only(left: 5), child: Text("Loading")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -34,7 +64,10 @@ class LoginPage extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 40),
                 child: TextField(
-                  decoration: InputDecoration(labelText: "Email Id"),
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: "Email Id",
+                  ),
                 ),
               ),
               SizedBox(height: size.height * 0.03),
@@ -42,6 +75,7 @@ class LoginPage extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 40),
                 child: TextField(
+                  controller: passwordController,
                   decoration: InputDecoration(labelText: "Password"),
                   obscureText: true,
                 ),
@@ -49,10 +83,17 @@ class LoginPage extends StatelessWidget {
               Container(
                 alignment: Alignment.centerRight,
                 margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                child: Text(
-                  "Forgot your password?",
-                  //send otp here
-                  style: TextStyle(fontSize: 12, color: loginpageTextColor),
+                child: FlatButton(
+                  onPressed: () {
+                    // Navigator.pop(context);
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => SignUp()));
+                  },
+                  child: Text(
+                    "New User? Sign in",
+                    //send otp here
+                    style: TextStyle(fontSize: 12, color: loginpageTextColor),
+                  ),
                 ),
               ),
               SizedBox(height: size.height * 0.05),
@@ -60,12 +101,20 @@ class LoginPage extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                 child: RaisedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyProfile()),
-                    );
-                  }, 
+                  onPressed: () async {
+                    // showAlertDialog(context);
+                    context.read<AuthenticationService>().signIn(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                        );
+
+                    // Navigator.pop(context);
+                    // _onLoading();
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => MyProfile()),
+                    // );
+                  },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0)),
                   textColor: Colors.white,
@@ -89,5 +138,6 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+    // );
   }
 }

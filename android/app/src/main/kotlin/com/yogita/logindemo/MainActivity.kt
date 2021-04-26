@@ -1,4 +1,4 @@
-package com.yogita.logindemo
+package com.meet.logindemo
 
 import io.flutter.embedding.android.FlutterActivity
 
