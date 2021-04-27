@@ -3,9 +3,11 @@ import 'package:LoanEligibilityChecker/SignUp.dart';
 import 'package:LoanEligibilityChecker/backgroundandimg.dart';
 import 'package:LoanEligibilityChecker/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'const.dart';
 import 'backgroundandimg.dart';
 import 'package:provider/provider.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -31,19 +33,57 @@ showAlertDialog(BuildContext context) {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // bool validEmail;
+  // String emailValidstring(String value) {
+  //   Pattern pattern =
+  //       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  //   RegExp regex = new RegExp(pattern);
+  //   if (!regex.hasMatch(value))
+  //     return 'Enter Valid Email';
+  //   // return validEmail = valid;
+  //   else
+  //     return null;
+  // }
+
+  // bool emailValidbool(String value) {
+  //   Pattern pattern =
+  //       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  //   RegExp regex = new RegExp(pattern);
+  //   if (!regex.hasMatch(value))
+  //     return validEmail = false;
+  //   // return validEmail = valid;
+  //   else
+  //     return validEmail = true;
+  // }
+
+  final emailvalid = MultiValidator([
+    RequiredValidator(errorText: 'email is required'),
+    PatternValidator(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+        errorText: 'enter valid email')
+  ]);
+  final passwordvalid = MultiValidator([
+    RequiredValidator(errorText: 'password is required'),
+    PatternValidator(
+        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&])[A-Za-z\d@$#!%*?&]{8,}$",
+        errorText:
+            'Enter the password you used on signup')
+  ]);
   final TextEditingController emailController = TextEditingController();
+bool showpass = false;
+  bool passwordObscure = true;
 
   final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Backgroundandimg(
           child: Form(
-            autovalidateMode: AutovalidateMode.always,
-              
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -62,29 +102,55 @@ class _LoginPageState extends State<LoginPage> {
                     textAlign: TextAlign.left,
                   ),
                 ),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 40),
                   child: TextFormField(
-    //                 validator: (var value) {
-    // return (value != null && value.contains('0')) ? 'Do not use the @ char.' : null;},
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp("[a-zA-Z0-9@_/./+/-]"),
+                      ),
+                    ],
+                    keyboardType: TextInputType.emailAddress,
+                    validator: emailvalid,
+                    //                 validator: (var value) {
+                    // return (value != null && value.contains('0')) ? 'Do not use the @ char.' : null;},
                     controller: emailController,
                     decoration: InputDecoration(
                       labelText: "Email Id",
                     ),
                   ),
                 ),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 40),
-                  child: TextField(
+                  child: TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp("[a-zA-Z0-9@_/./+/()#\-/@/!/%/*/?/&\$]"),
+                      ),
+                    ],
+                    validator: passwordvalid,
                     controller: passwordController,
                     decoration: InputDecoration(labelText: "Password"),
-                    obscureText: true,
+                    obscureText: passwordObscure,
                   ),
                 ),
+                CheckboxListTile(
+                  controlAffinity: ListTileControlAffinity.leading,
+                  title: Text('show password'),
+                  value: showpass,
+                  onChanged: (ne) {
+                    setState(() {
+                      showpass = ne;
+                      if (ne == true)
+                        passwordObscure = false;
+                      else
+                        passwordObscure = true;
+                    });
+                  }),
                 Container(
                   alignment: Alignment.centerRight,
                   margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
@@ -101,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: size.height * 0.05),
+                SizedBox(height: 10),
                 Container(
                   alignment: Alignment.centerRight,
                   margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
@@ -127,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Container(
                       alignment: Alignment.center,
                       height: 50.0,
-                      width: size.width * 0.5,
+                      // width: size.width * 0.5,
                       decoration: boxDesign(),
                       padding: const EdgeInsets.all(0),
                       child: Text(

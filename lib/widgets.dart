@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'ContactUs.dart';
 import 'LoanChecker.dart';
@@ -18,6 +19,8 @@ import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To F
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; // For Image Picker
 import 'package:path/path.dart' as Path;
+import 'package:form_field_validator/form_field_validator.dart';
+
 
 class DrawerLoan extends StatelessWidget {
   @override
@@ -284,16 +287,20 @@ class Details extends StatelessWidget {
 
 class SignUpWidget extends StatelessWidget {
   const SignUpWidget({
+    this.regex,
+    this.valid,
     this.hint,
     @required this.controllerVar,
     @required this.label,
     @required this.bl,
     Key key,
   }) : super(key: key);
+  final MultiValidator valid;
   final String label;
   final bool bl;
   final String hint;
   final TextEditingController controllerVar;
+  final RegExp regex;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -302,7 +309,9 @@ class SignUpWidget extends StatelessWidget {
         Container(
           alignment: Alignment.center,
           margin: EdgeInsets.symmetric(horizontal: 40),
-          child: TextField(
+          child: TextFormField(
+            inputFormatters: [ FilteringTextInputFormatter.allow(regex), ],
+            validator: valid,
             controller: controllerVar,
             decoration: InputDecoration(
               labelText: label,
