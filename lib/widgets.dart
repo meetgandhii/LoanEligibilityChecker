@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'ContactUs.dart';
 import 'LoanChecker.dart';
 import 'MyProfile.dart';
@@ -73,8 +74,10 @@ class DrawerLoan extends StatelessWidget {
                   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
                   _signOut() async {
                     await _firebaseAuth.signOut();
-                    Navigator.popUntil(context, ModalRoute.withName(AuthenticationWrapper().toString()));
-                    
+                    Phoenix.rebirth(context);
+                    // Navigator.pop(context);
+                    // Navigator.popUntil(context, ModalRoute.withName(AuthenticationWrapper().toString()));
+                    // new MyApp();
 
                     // await _googleSignIn.signOut();
                   }
@@ -309,6 +312,37 @@ class SignUpWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class DropDown extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _DropDownState();
+}
+
+class _DropDownState extends State<DropDown> {
+//  List<String> _options = ['Please choose a option', 'A', 'B', 'C', 'D']; // Option 1
+//  String _selectedoption = 'Please choose a option'; // Option 1
+  List<String> _options = ['A', 'B', 'C', 'D']; // Option 2
+  String _selectedoption; // Option 2
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      hint: Text('Please choose a option'), // Not necessary for Option 1
+      value: _selectedoption,
+      onChanged: (newValue) {
+        setState(() {
+          _selectedoption = newValue;
+        });
+      },
+      items: _options.map((option) {
+        return DropdownMenuItem(
+          child: new Text(option),
+          value: option,
+        );
+      }).toList(),
     );
   }
 }

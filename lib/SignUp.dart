@@ -23,6 +23,34 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  List<String> _optionsGender = [
+    'Male',
+    'Female',
+    'Other',
+    'Rather not specify'
+  ];
+  List<String> _optionsOccupation = [
+    'Unemployed',
+    'Unskilled Employee',
+    'Skilled Employee',
+    'Self Employed'
+  ];
+  List<String> _apartmentStatus = [
+    'Rented Flat',
+    'Own an apartment',
+    'Free apartment',
+    // 'Rather not specify'
+  ]; // Option 2
+  List<String> _optionsYesNo = [
+    'Yes',
+    'No',
+  ]; //
+  String _selectedoptionGender; // Option 2
+  String _selectedoptionMarry; // Option 2
+  String _selectedoptionSelfEmployed; // Option 2
+  String _selectedoptionApartmentStatus; // Option 2
+  String _selectedoptionOccupation; // Option 2
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool checkBox = false;
   bool passwordObscure = true;
@@ -70,6 +98,7 @@ class _SignUpState extends State<SignUp> {
                 textAlign: TextAlign.left,
               ),
             ),
+            // DropDown(),
             SignUpWidget(
               label: 'Name',
               hint: 'Meet / Any Name',
@@ -82,18 +111,88 @@ class _SignUpState extends State<SignUp> {
               bl: false,
               controllerVar: spageController,
             ),
-            SignUpWidget(
-              label: 'Gender',
-              hint: 'Male / Female / Other',
-              bl: false,
-              controllerVar: spgenderController,
+            SizedBox(height: 10.0),
+            Container(
+              width: 1000,
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.symmetric(horizontal: 40),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 0.75,
+                    color: Color(0xFF323232),
+                  ),
+                ),
+              ),
+              child: DropdownButton(
+                hint: Text(
+                  'Gender',
+                  style: TextStyle(
+                    fontSize: 19,
+                  ),
+                ), // Not necessary for Option 1
+                value: _selectedoptionGender,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedoptionGender = newValue;
+                    print(_selectedoptionGender);
+                  });
+                },
+                items: _optionsGender.map((option) {
+                  return DropdownMenuItem(
+                    child: new Text(option),
+                    value: option,
+                  );
+                }).toList(),
+              ),
             ),
-            SignUpWidget(
-              label: 'Are you married',
-              hint: 'Yes/No',
-              bl: false,
-              controllerVar: spmarryController,
+            SizedBox(height: 10.0),
+            // SignUpWidget(
+            //   label: 'Gender',
+            //   hint: 'Male / Female / Other',
+            //   bl: false,
+            //   controllerVar: spgenderController,
+            // ),
+            Container(
+              width: 1000,
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.symmetric(horizontal: 40),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 0.75,
+                    color: Color(0xFF323232),
+                  ),
+                ),
+              ),
+              child: DropdownButton(
+                hint: Text(
+                  'Are you married',
+                  style: TextStyle(
+                    fontSize: 19,
+                  ),
+                ), // Not necessary for Option 1
+                value: _selectedoptionMarry,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedoptionMarry = newValue;
+                    print(_selectedoptionMarry);
+                  });
+                },
+                items: _optionsYesNo.map((option) {
+                  return DropdownMenuItem(
+                    child: new Text(option),
+                    value: option,
+                  );
+                }).toList(),
+              ),
             ),
+            // SignUpWidget(
+            //   label: 'Are you married',
+            //   hint: 'Yes/No',
+            //   bl: false,
+            //   controllerVar: spmarryController,
+            // ),
             SignUpWidget(
               label: 'Number of Dependants',
               hint: '0/1/2/3/...',
@@ -106,12 +205,47 @@ class _SignUpState extends State<SignUp> {
               bl: false,
               controllerVar: speducationController,
             ),
-            SignUpWidget(
-              label: 'Are you self employed?',
-              hint: 'Yes/No',
-              bl: false,
-              controllerVar: spselfemployController,
+            SizedBox(height: 10.0),
+            Container(
+              width: 1000,
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.symmetric(horizontal: 40),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 0.75,
+                    color: Color(0xFF323232),
+                  ),
+                ),
+              ),
+              child: DropdownButton(
+                hint: Text(
+                  'Are you self employed',
+                  style: TextStyle(
+                    fontSize: 19,
+                  ),
+                ), // Not necessary for Option 1
+                value: _selectedoptionSelfEmployed,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedoptionSelfEmployed = newValue;
+                    print(_selectedoptionSelfEmployed);
+                  });
+                },
+                items: _optionsYesNo.map((option) {
+                  return DropdownMenuItem(
+                    child: new Text(option),
+                    value: option,
+                  );
+                }).toList(),
+              ),
             ),
+            // SignUpWidget(
+            //   label: 'Are you self employed?',
+            //   hint: 'Yes/No',
+            //   bl: false,
+            //   controllerVar: spselfemployController,
+            // ),
             SignUpWidget(
               label: 'Your Income',
               hint: 'In Numeric Value Only',
@@ -160,17 +294,87 @@ class _SignUpState extends State<SignUp> {
               bl: false,
               controllerVar: spccwothersController,
             ),
-            SignUpWidget(
-              label: 'Own your apartment/Pay rent/Live for free',
-              hint: 'Own/Rent/Free',
-              bl: false,
-              controllerVar: spaptstatusController,
+            SizedBox(height: 10.0),
+            Container(
+              width: 1000,
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.symmetric(horizontal: 40),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 0.75,
+                    color: Color(0xFF323232),
+                  ),
+                ),
+              ),
+              child: DropdownButton(
+                hint: Text(
+                  'What is your occupation status',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ), // Not necessary for Option 1
+                value: _selectedoptionOccupation,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedoptionOccupation = newValue;
+                    print(_selectedoptionOccupation);
+                  });
+                },
+                items: _optionsOccupation.map((option) {
+                  return DropdownMenuItem(
+                    child: new Text(option),
+                    value: option,
+                  );
+                }).toList(),
+              ),
             ),
-            SignUpWidget(
-              label: 'Occupation',
-              hint: 'unemployed/unskilled/skilled/self employed',
-              bl: false,
-              controllerVar: spoccupationController,
+            SizedBox(height: 10.0),
+            // SignUpWidget(
+            //   label: 'Own your apartment/Pay rent/Live for free',
+            //   hint: 'Own/Rent/Free',
+            //   bl: false,
+            //   controllerVar: spaptstatusController,
+            // ),
+            // SignUpWidget(
+            //   label: 'Occupation',
+            //   hint: 'unemployed/unskilled/skilled/self employed',
+            //   bl: false,
+            //   controllerVar: spoccupationController,
+            // ),
+            Container(
+              width: 1000,
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.symmetric(horizontal: 40),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 0.75,
+                    color: Color(0xFF323232),
+                  ),
+                ),
+              ),
+              child: DropdownButton(
+                hint: Text(
+                  'What is your apartment status',
+                  style: TextStyle(
+                    fontSize: 19,
+                  ),
+                ), // Not necessary for Option 1
+                value: _selectedoptionApartmentStatus,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedoptionApartmentStatus = newValue;
+                    print(_selectedoptionApartmentStatus);
+                  });
+                },
+                items: _apartmentStatus.map((option) {
+                  return DropdownMenuItem(
+                    child: new Text(option),
+                    value: option,
+                  );
+                }).toList(),
+              ),
             ),
             SignUpWidget(
               label: 'Email Id',
@@ -244,17 +448,18 @@ class _SignUpState extends State<SignUp> {
                         email: spemailController.text,
                         password: sppasswordController.text,
                       );
+                      // print(_selectedoptionMarry + " " + _selectedoptionGender, );
                   User user = _auth.currentUser;
                   String userId = (FirebaseAuth.instance.currentUser).uid;
                   await _firestore.collection("users").doc(user.uid).set({
                     'Name': spnameController.text,
                     'Email Id': spemailController.text,
                     'Age': spageController.text,
-                    'Gender': spgenderController.text,
-                    'Marriage Status': spmarryController.text,
+                    'Gender': _selectedoptionGender,
+                    'Marriage Status': _selectedoptionMarry,
                     'Number of Dependant': spdependantsController.text,
                     'Education Level': speducationController.text,
-                    'Are they self employed': spselfemployController.text,
+                    'Are they self employed': _selectedoptionSelfEmployed,
                     'Applicant\s income': spyourincomeController.text,
                     'Co-applicant\s income': spcoincomeController.text,
                     'Property Area': sppropertyareaController.text,
@@ -266,8 +471,8 @@ class _SignUpState extends State<SignUp> {
                         spccwusController.text,
                     'Number of credit cards with other banks':
                         spccwothersController.text,
-                    'Apartment Status': spaptstatusController.text,
-                    'Occupation': spoccupationController.text,
+                    'Apartment Status': _selectedoptionApartmentStatus,
+                    'Occupation': _selectedoptionOccupation,
                     'UID': userId,
                     'Loan Status': 'No Loans Applied For',
                     'Pfp': _uploadedFileURL,

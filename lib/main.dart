@@ -7,11 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'LoginPage.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(
+    Phoenix(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,13 +26,13 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
-      ),
-      StreamProvider(
-        // initialData: LoginPage(),
-        create: (context) => context.read<AuthenticationService>().authStateChange,
-      ),
+        ),
+        StreamProvider(
+          // initialData: LoginPage(),
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChange,
+        ),
       ],
-      
       child: MaterialApp(
         theme: ThemeData(),
         debugShowCheckedModeBanner: false,
@@ -38,18 +43,19 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({Key key,}) : super(key : key);
+  const AuthenticationWrapper({
+    Key key,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
 
-    if (firebaseUser != null){
+    if (firebaseUser != null) {
       print(firebaseUser);
       return MyProfile();
-      
-    } else{
-    print(firebaseUser);
-    return LoginPage();
+    } else {
+      print(firebaseUser);
+      return LoginPage();
     }
   }
 }
