@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To Firestore
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart'; // For Image Picker
 import 'package:path/path.dart' as Path;
 import 'package:LoanEligibilityChecker/backgroundandimg.dart';
@@ -14,19 +15,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-
 class SignUp extends StatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
-    final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
-    final nameValid = MultiValidator([
-      RequiredValidator(errorText: 'Name is required'),
-      PatternValidator((r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]'), errorText: 'enter valid name')
-    ]);
-    final emailvalid = MultiValidator([
+  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
+  final nameValid = MultiValidator([
+    RequiredValidator(errorText: 'Name is required'),
+    // PatternValidator((r'[a-zA-Z]'),
+    //     errorText: 'enter valid name')
+  ]);
+  final infoValid = MultiValidator([
+    RequiredValidator(errorText: 'info is required'),
+    // PatternValidator(
+    //     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+    //     errorText: 'enter valid info')
+  ]);
+  final emailvalid = MultiValidator([
     RequiredValidator(errorText: 'email is required'),
     PatternValidator(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
@@ -36,7 +43,8 @@ class _SignUpState extends State<SignUp> {
     RequiredValidator(errorText: 'password is required'),
     PatternValidator(
         r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&])[A-Za-z\d@$#!%*?&]{8,}$",
-        errorText: 'Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character')
+        errorText:
+            'Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character')
   ]);
   //Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:
   List<String> _optionsGender = [
@@ -44,6 +52,11 @@ class _SignUpState extends State<SignUp> {
     'Female',
     'Other',
     'Rather not specify'
+  ];
+  List<String> _propertyArea = [
+    'Rural',
+    'Urban',
+    'Semi-Urban',
   ];
   List<String> _optionsOccupation = [
     'Unemployed',
@@ -61,12 +74,13 @@ class _SignUpState extends State<SignUp> {
     'Yes',
     'No',
   ]; //
+  String _selectedPropertyArea;
   String _selectedoptionGender; // Option 2
   String _selectedoptionMarry; // Option 2
   String _selectedoptionSelfEmployed; // Option 2
   String _selectedoptionApartmentStatus; // Option 2
   String _selectedoptionOccupation; // Option 2
-
+  String error = '';
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool checkBox = false;
   bool passwordObscure = true;
@@ -127,6 +141,7 @@ class _SignUpState extends State<SignUp> {
                 controllerVar: spnameController,
               ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'Age',
                 hint: '19 / Any Number',
@@ -216,6 +231,7 @@ class _SignUpState extends State<SignUp> {
               //   controllerVar: spmarryController,
               // ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'Number of Dependants',
                 hint: '0/1/2/3/...',
@@ -223,6 +239,7 @@ class _SignUpState extends State<SignUp> {
                 controllerVar: spdependantsController,
               ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[a-zA-Z]"),
                 label: 'Your Education',
                 hint: 'UG/PG/HighSchool/School',
@@ -271,6 +288,7 @@ class _SignUpState extends State<SignUp> {
               //   controllerVar: spselfemployController,
               // ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'Your Income',
                 hint: 'In Numeric Value Only',
@@ -278,20 +296,57 @@ class _SignUpState extends State<SignUp> {
                 controllerVar: spyourincomeController,
               ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'Co-Applicant\'s Income',
                 hint: 'In Numeric Value Only',
                 bl: false,
                 controllerVar: spcoincomeController,
               ),
-              SignUpWidget(
-                regex: RegExp("[0-9]"),
-                label: 'Property Area',
-                hint: 'Enter the number of square feet',
-                bl: false,
-                controllerVar: sppropertyareaController,
+              Container(
+                width: 1000,
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 0.75,
+                      color: Color(0xFF323232),
+                    ),
+                  ),
+                ),
+                child: DropdownButton(
+                  hint: Text(
+                    'Property Area',
+                    style: TextStyle(
+                      fontSize: 19,
+                    ),
+                  ), // Not necessary for Option 1
+                  value: _selectedPropertyArea,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedPropertyArea = newValue;
+                      print(_selectedPropertyArea);
+                    });
+                  },
+                  items: _propertyArea.map((option) {
+                    return DropdownMenuItem(
+                      child: new Text(option),
+                      value: option,
+                    );
+                  }).toList(),
+                ),
               ),
+              // SignUpWidget(
+              //   valid: infoValid,
+              //   regex: RegExp("[0-9]"),
+              //   label: 'Property Area',
+              //   hint: 'Enter the number of square feet',
+              //   bl: false,
+              //   controllerVar: _selectedPropertyArea,
+              // ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'Account Balance',
                 bl: false,
@@ -299,6 +354,7 @@ class _SignUpState extends State<SignUp> {
                 controllerVar: spaccbalController,
               ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'Savings Amount',
                 hint: 'Numeric Value Only',
@@ -306,6 +362,7 @@ class _SignUpState extends State<SignUp> {
                 controllerVar: spsavingsController,
               ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'How long have you been employed?',
                 hint: 'In years',
@@ -313,6 +370,7 @@ class _SignUpState extends State<SignUp> {
                 controllerVar: spemploydurationController,
               ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'How many credit cards do you have with our bank?',
                 hint: 'Numeric Value only',
@@ -320,6 +378,7 @@ class _SignUpState extends State<SignUp> {
                 controllerVar: spccwusController,
               ),
               SignUpWidget(
+                valid: infoValid,
                 regex: RegExp("[0-9]"),
                 label: 'How many credit cards do you have with other banks?',
                 hint: 'Numeric Value only',
@@ -418,7 +477,7 @@ class _SignUpState extends State<SignUp> {
               ),
               SignUpWidget(
                 valid: passwordvalid,
-                 regex: RegExp("[a-zA-Z0-9@_/./+/()#\-/@/!/%/*/?/&\$]"),
+                regex: RegExp("[a-zA-Z0-9@_/./+/()#\-/@/!/%/*/?/&\$]"),
                 label: 'Password',
                 hint: 'password',
                 bl: passwordObscure,
@@ -476,48 +535,112 @@ class _SignUpState extends State<SignUp> {
                 ],
               ),
               Container(
+                padding: EdgeInsets.only(top: 20),
+                child: Text(
+                  error,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.ptSans(
+                    color: Colors.red,
+                    backgroundColor: Colors.grey[100],
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Container(
                 alignment: Alignment.centerRight,
                 margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                 child: RaisedButton(
                   onPressed: () async {
-                    context.read<AuthenticationService>().signUp(
-                          email: spemailController.text,
-                          password: sppasswordController.text,
-                        );
-                        // print(_selectedoptionMarry + " " + _selectedoptionGender, );
-                    User user = _auth.currentUser;
-                    String userId = (FirebaseAuth.instance.currentUser).uid;
-                    await _firestore.collection("users").doc(user.uid).set({
-                      'Name': spnameController.text,
-                      'Email Id': spemailController.text,
-                      'Age': spageController.text,
-                      'Gender': _selectedoptionGender,
-                      'Marriage Status': _selectedoptionMarry,
-                      'Number of Dependant': spdependantsController.text,
-                      'Education Level': speducationController.text,
-                      'Are they self employed': _selectedoptionSelfEmployed,
-                      'Applicant\s income': spyourincomeController.text,
-                      'Co-applicant\s income': spcoincomeController.text,
-                      'Property Area': sppropertyareaController.text,
-                      'Account Balance': spaccbalController.text,
-                      'Savings in INR': spsavingsController.text,
-                      'Currently employed from how long':
-                          spemploydurationController.text,
-                      'Number of credit cards at this bank':
-                          spccwusController.text,
-                      'Number of credit cards with other banks':
-                          spccwothersController.text,
-                      'Apartment Status': _selectedoptionApartmentStatus,
-                      'Occupation': _selectedoptionOccupation,
-                      'UID': userId,
-                      'Loan Status': 'No Loans Applied For',
-                      'Pfp': _uploadedFileURL,
-                    });
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyProfile()),
-                    );
-                    _onLoading();
+                    if (spnameController != null &&
+                        spemailController != null &&
+                        spageController != null &&
+                        _selectedoptionGender != null &&
+                        _selectedoptionMarry != null &&
+                        spdependantsController != null &&
+                        speducationController != null &&
+                        _selectedoptionSelfEmployed != null &&
+                        spyourincomeController != null &&
+                        spcoincomeController != null &&
+                        _selectedPropertyArea != null &&
+                        spaccbalController != null &&
+                        spsavingsController != null &&
+                        spemploydurationController != null &&
+                        spccwusController != null &&
+                        spccwothersController != null &&
+                        _selectedoptionApartmentStatus != null &&
+                        _selectedoptionOccupation != null &&
+                        _uploadedFileURL != null &&
+                        sppasswordController != null) {
+                      context.read<AuthenticationService>().signUp(
+                            email: spemailController.text,
+                            password: sppasswordController.text,
+                          );
+                      // print(_selectedoptionMarry + " " + _selectedoptionGender, );
+                      User user = _auth.currentUser;
+                      String userId = (FirebaseAuth.instance.currentUser).uid;
+                      await _firestore.collection("users").doc(user.uid).set({
+                        'Name': spnameController.text,
+                        'Email Id': spemailController.text,
+                        'Age': spageController.text,
+                        'Gender': _selectedoptionGender,
+                        'Marriage Status': _selectedoptionMarry,
+                        'Number of Dependant': spdependantsController.text,
+                        'Education Level': speducationController.text,
+                        'Are they self employed': _selectedoptionSelfEmployed,
+                        'Applicant\s income': spyourincomeController.text,
+                        'Co-applicant\s income': spcoincomeController.text,
+                        'Property Area': _selectedPropertyArea,
+                        'Account Balance': spaccbalController.text,
+                        'Savings in INR': spsavingsController.text,
+                        'Currently employed from how long':
+                            spemploydurationController.text,
+                        'Number of credit cards at this bank':
+                            spccwusController.text,
+                        'Number of credit cards with other banks':
+                            spccwothersController.text,
+                        'Apartment Status': _selectedoptionApartmentStatus,
+                        'Occupation': _selectedoptionOccupation,
+                        'UID': userId,
+                        'Loan Status': 'No Loans Applied For',
+                        'Pfp': _uploadedFileURL,
+                      });
+                      setState(() {
+                        spnameController = null;
+                        spemailController = null;
+                        spageController = null;
+                        _selectedoptionGender = null;
+                        _selectedoptionMarry = null;
+                        spdependantsController = null;
+                        speducationController = null;
+                        _selectedoptionSelfEmployed = null;
+                        spyourincomeController = null;
+                        spcoincomeController = null;
+                        _selectedPropertyArea = null;
+                        spaccbalController = null;
+                        spsavingsController = null;
+                        spemploydurationController = null;
+                        spccwusController = null;
+                        spccwothersController = null;
+                        _selectedoptionApartmentStatus = null;
+                        _selectedoptionOccupation = null;
+                        _uploadedFileURL = null;
+                        sppasswordController = null;
+                        error = '';
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyProfile()),
+                      );
+                      _onLoading();
+
+                      print('All ok');
+                    } else {
+                      setState(() {
+                        error =
+                            'One or more fields have been left blank. Please fill out all info';
+                      });
+                      print('not ok');
+                    }
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0)),

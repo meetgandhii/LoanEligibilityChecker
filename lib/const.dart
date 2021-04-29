@@ -20,24 +20,24 @@ String dt, mnth, yr;
 String dobText = 'Click here to select DOB';
 
 
-final TextEditingController spnameController = TextEditingController();
-final TextEditingController spageController = TextEditingController();
-final TextEditingController spgenderController = TextEditingController();
-final TextEditingController spmarryController = TextEditingController();
-final TextEditingController spdependantsController = TextEditingController();
-final TextEditingController speducationController = TextEditingController();
-final TextEditingController spselfemployController = TextEditingController();
-final TextEditingController spyourincomeController = TextEditingController();
-final TextEditingController spcoincomeController = TextEditingController();
-final TextEditingController sppropertyareaController = TextEditingController();
-final TextEditingController spaccbalController = TextEditingController();
-final TextEditingController spsavingsController = TextEditingController();
-final TextEditingController spemploydurationController = TextEditingController();
-final TextEditingController spccwusController = TextEditingController(); //ccwus = credit cards with us
-final TextEditingController spccwothersController = TextEditingController(); // see upar and samaj jao khudse
-final TextEditingController spaptstatusController = TextEditingController();
-final TextEditingController spoccupationController = TextEditingController();
-final TextEditingController spemailController = TextEditingController();
-final TextEditingController sppasswordController = TextEditingController();
-final TextEditingController lcloanAmtController = TextEditingController();
-final TextEditingController lcloanDurationController = TextEditingController();
+TextEditingController spnameController = TextEditingController();
+TextEditingController spageController = TextEditingController();
+TextEditingController spgenderController = TextEditingController();
+TextEditingController spmarryController = TextEditingController();
+TextEditingController spdependantsController = TextEditingController();
+TextEditingController speducationController = TextEditingController();
+TextEditingController spselfemployController = TextEditingController();
+TextEditingController spyourincomeController = TextEditingController();
+TextEditingController spcoincomeController = TextEditingController();
+TextEditingController sppropertyareaController = TextEditingController();
+TextEditingController spaccbalController = TextEditingController();
+TextEditingController spsavingsController = TextEditingController();
+TextEditingController spemploydurationController = TextEditingController();
+TextEditingController spccwusController = TextEditingController(); //ccwus = credit cards with us
+TextEditingController spccwothersController = TextEditingController(); // see upar and samaj jao khudse
+TextEditingController spaptstatusController = TextEditingController();
+TextEditingController spoccupationController = TextEditingController();
+TextEditingController spemailController = TextEditingController();
+TextEditingController sppasswordController = TextEditingController();
+TextEditingController lcloanAmtController = TextEditingController();
+TextEditingController lcloanDurationController = TextEditingController();

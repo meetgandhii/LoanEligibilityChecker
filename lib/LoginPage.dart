@@ -88,7 +88,7 @@ bool showpass = false;
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 100.0,
+                  height: 140.0,
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
