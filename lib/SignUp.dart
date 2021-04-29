@@ -64,6 +64,11 @@ class _SignUpState extends State<SignUp> {
     'Skilled Employee',
     'Self Employed'
   ];
+  List<String> _educationstatus = [
+    'Graduate',
+    'Non graduate',
+    // 'Rather not specify'
+  ];
   List<String> _apartmentStatus = [
     'Rented Flat',
     'Own an apartment',
@@ -75,6 +80,7 @@ class _SignUpState extends State<SignUp> {
     'No',
   ]; //
   String _selectedPropertyArea;
+  String _selectedEducationStatus;
   String _selectedoptionGender; // Option 2
   String _selectedoptionMarry; // Option 2
   String _selectedoptionSelfEmployed; // Option 2
@@ -238,14 +244,48 @@ class _SignUpState extends State<SignUp> {
                 bl: false,
                 controllerVar: spdependantsController,
               ),
-              SignUpWidget(
-                valid: infoValid,
-                regex: RegExp("[a-zA-Z]"),
-                label: 'Your Education',
-                hint: 'UG/PG/HighSchool/School',
-                bl: false,
-                controllerVar: speducationController,
+              Container(
+                width: 1000,
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 0.75,
+                      color: Color(0xFF323232),
+                    ),
+                  ),
+                ),
+                child: DropdownButton(
+                  hint: Text(
+                    'Education Status',
+                    style: TextStyle(
+                      fontSize: 19,
+                    ),
+                  ), // Not necessary for Option 1
+                  value: _selectedEducationStatus,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedEducationStatus = newValue;
+                      print(_selectedEducationStatus);
+                    });
+                  },
+                  items: _educationstatus.map((option) {
+                    return DropdownMenuItem(
+                      child: new Text(option),
+                      value: option,
+                    );
+                  }).toList(),
+                ),
               ),
+              // SignUpWidget(
+              //   valid: infoValid,
+              //   regex: RegExp("[a-zA-Z]"),
+              //   label: 'Your Education',
+              //   hint: 'UG/PG/HighSchool/School',
+              //   bl: false,
+              //   controllerVar: speducationController,
+              // ),
               SizedBox(height: 10.0),
               Container(
                 width: 1000,
@@ -557,7 +597,7 @@ class _SignUpState extends State<SignUp> {
                         _selectedoptionGender != null &&
                         _selectedoptionMarry != null &&
                         spdependantsController != null &&
-                        speducationController != null &&
+                        _selectedEducationStatus != null &&
                         _selectedoptionSelfEmployed != null &&
                         spyourincomeController != null &&
                         spcoincomeController != null &&
@@ -585,7 +625,7 @@ class _SignUpState extends State<SignUp> {
                         'Gender': _selectedoptionGender,
                         'Marriage Status': _selectedoptionMarry,
                         'Number of Dependant': spdependantsController.text,
-                        'Education Level': speducationController.text,
+                        'Education Level': _selectedEducationStatus,
                         'Are they self employed': _selectedoptionSelfEmployed,
                         'Applicant\s income': spyourincomeController.text,
                         'Co-applicant\s income': spcoincomeController.text,
@@ -611,7 +651,7 @@ class _SignUpState extends State<SignUp> {
                         _selectedoptionGender = null;
                         _selectedoptionMarry = null;
                         spdependantsController = null;
-                        speducationController = null;
+                        _selectedEducationStatus = null;
                         _selectedoptionSelfEmployed = null;
                         spyourincomeController = null;
                         spcoincomeController = null;
